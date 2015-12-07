@@ -44,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * 直接得到想要的bean
-     * 并且有完整的log展示
-     * 对错误分发更准确
-     */
     private void after() {
         final Call<BaseListResponse<WaitingAskBean>> waitReplyList = MyNet.get().getWaitReplyList(107, 1, 20);
         waitReplyList.enqueue(new MyNetCallBack<BaseListResponse<WaitingAskBean>>() {
