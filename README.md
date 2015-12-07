@@ -1,6 +1,11 @@
 # EasyNetSample
 
 * 基于retrofit2，用法不变
+
+    * 多了个自定义callBack
+    * 多了个自定义基类请求
+    
+* 自定义请求，列表加载仅需要一个baseRequest搞定
 * 基于两级泛型传递，直接得到解析对象
 * 完善的请求log打印
 * 准确的错误分发
