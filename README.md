@@ -51,4 +51,8 @@
 
     }
 
+## setup
+
+    compile 'com.hadlink:easynet:1.0.0'
+    
 ##check demo please

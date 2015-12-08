@@ -7,7 +7,7 @@ public final class C {
      * 主机
      */
     public static final class Host {
-        public static final String host = "http://eptapi.imchehu.com/";//TODO
+        public static final String host = "http://op.juhe.cn/";
     }
 
 }
