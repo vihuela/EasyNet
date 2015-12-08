@@ -27,7 +27,7 @@
     NetUtils.setNetConfig(netConfig)
     
 ### Second Step ###
-> *config your baseResponse ( **implements CommonResponse<T>** )*
+> *config your baseResponse ( **implements CommonResponse** )*
 
     public class BaseList_1Response<T> implements CommonResponse<List<T>> {
         public String reason;
@@ -136,4 +136,9 @@
 # setup
 
     compile 'com.hadlink:easynet:1.0.0'
+    
+# author
+
+[vihuela](https://github.com/vihuela)  
+[zhoumingliang](https://github.com/zhoumingliang)  
     
