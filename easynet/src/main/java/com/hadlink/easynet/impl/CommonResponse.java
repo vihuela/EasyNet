@@ -4,17 +4,17 @@ package com.hadlink.easynet.impl;
 public interface CommonResponse<T> {
 
     /**
-     * 接口返回的有效数据方法
+     * restful valid data
      */
     T getResult();
 
     /**
-     * 设置具体是什么值是接口返回的有效数据
+     * Designation type of valid data
      */
     void setResult(T t);
 
     /**
-     * 判断接口返回的数据是否有效
+     * check data is it effective
      */
     boolean isValid();
 }

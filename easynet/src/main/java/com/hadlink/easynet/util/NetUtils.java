@@ -16,7 +16,7 @@ public abstract class NetUtils {
     }
 
     /**
-     * 获取运行在主线程的Observable
+     * retain run mainThread ob
      */
     public static <T> Observable<T> getObservable(Observable<T> observable) {
         return observable

@@ -4,7 +4,7 @@ import android.app.Application;
 
 
 /**
- * 网络配置类
+ * Net Config
  */
 public class NetConfig {
     public String LOG_TAG = "lays";

@@ -71,16 +71,16 @@ public class OkHttpUtils {
             String TAG = NetUtils.netConfig.LOG_TAG;
 
             Request request = chain.request();
-            String param = "post".equalsIgnoreCase(request.method()) ? "---REQ：" + "\n" + "       " + bodyToString(request) + "\n" : "";
+            String param = "post".equalsIgnoreCase(request.method()) ? "---REQ:" + "\n" + "       " + bodyToString(request) + "\n" : "";
             String beautyPrint;
             Response response;
             try {
                 response = chain.proceed(request);
             } catch (IOException e) {
                 beautyPrint = "--------------REQUEST START------------" + "\n"
-                        + String.format("---URL：%s %s Access Error", request.url(), request.method()) + "\n"
+                        + String.format("---URL:%s %s Access Error", request.url(), request.method()) + "\n"
                         + param
-                        + String.format("---Res：%s", !TextUtils.isEmpty(e.getMessage()) ? e.getMessage() : e.getClass().getSimpleName()) + "\n";
+                        + String.format("---Res:%s", !TextUtils.isEmpty(e.getMessage()) ? e.getMessage() : e.getClass().getSimpleName()) + "\n";
                 Log.e(TAG, beautyPrint);
                 Log.e(TAG, "--------------REQUEST END--------------");
                 throw new IOException(e);
@@ -91,18 +91,18 @@ public class OkHttpUtils {
             long t2 = System.nanoTime();
             if (bodyString.startsWith("{") || bodyString.startsWith("[")) {
                 beautyPrint = "--------------REQUEST START------------" + "\n"
-                        + String.format("---URL：%s %s in %.1fms", request.url(), request.method(), (t2 - t1) / 1e6d) + "\n"
+                        + String.format("---URL:%s %s in %.1fms", request.url(), request.method(), (t2 - t1) / 1e6d) + "\n"
                         + param
-                        + String.format("---RES：%s %d %s", response.protocol().toString(), response.code(), response.message()) + "\n";
+                        + String.format("---RES:%s %d %s", response.protocol().toString(), response.code(), response.message()) + "\n";
                 Log.d(TAG, beautyPrint);
                 if (NetUtils.netConfig.PRINT_BODY)
                     JsonPrinter.json(bodyString);
                 Log.d(TAG, "--------------REQUEST END--------------");
             } else {
                 beautyPrint = "--------------REQUEST START------------" + "\n"
-                        + String.format("---URL：%s %s in %.1fms", request.url(), request.method(), (t2 - t1) / 1e6d) + "\n"
+                        + String.format("---URL:%s %s in %.1fms", request.url(), request.method(), (t2 - t1) / 1e6d) + "\n"
                         + param
-                        + String.format("---RES：%s %d %s", response.protocol().toString(), response.code(), response.message()) + "\n"
+                        + String.format("---RES:%s %d %s", response.protocol().toString(), response.code(), response.message()) + "\n"
                         + bodyString + "\n"
                         + "--------------REQUEST END--------------";
                 Log.d(TAG, beautyPrint);

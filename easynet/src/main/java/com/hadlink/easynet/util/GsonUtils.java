@@ -8,7 +8,7 @@ import com.google.gson.internal.bind.DateTypeAdapter;
 import java.util.Date;
 
 /**
- * gson单例
+ * gson singleton
  */
 public enum GsonUtils {
     INSTANCE;

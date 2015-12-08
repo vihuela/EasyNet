@@ -7,7 +7,7 @@ import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
 /**
- * 获取支持gson、rxJava的retrofit
+ * retain retrofit singleton
  */
 public class RetrofitUtils {
     /**

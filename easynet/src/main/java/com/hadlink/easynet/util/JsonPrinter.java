@@ -8,14 +8,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * json打印辅助类
+ * json printer helper
  */
 public class JsonPrinter {
 
-    private static final char TOP_LEFT_CORNER = '╔';
-    private static final String DOUBLE_DIVIDER = "════════════════════════════════════════════";
-    private static final char HORIZONTAL_DOUBLE_LINE = '║';
-    private static final char BOTTOM_LEFT_CORNER = '╚';
+    private static final char TOP_LEFT_CORNER = '[';
+    private static final String DOUBLE_DIVIDER = "--------------------------------------------------";
+    private static final char HORIZONTAL_DOUBLE_LINE = '|';
+    private static final char BOTTOM_LEFT_CORNER = '[';
     private static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
     private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
     private static final int CHUNK_SIZE = 4000;

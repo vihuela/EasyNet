@@ -25,8 +25,7 @@ import retrofit.Retrofit;
 import rx.Subscriber;
 
 /**
- * 这里合并Call与Observable回调
- * @param <T>
+ *compose Call and Observable callBack
  */
 public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Callback<T>, CommonDispatchRequest<T> {
 
@@ -110,7 +109,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
             CommonResponse c = (CommonResponse) t;
             if (c.isValid()) {
                 /**
-                 *  有二级List
+                 *  have list
                  */
                 if (c.getResult() != null) {
                     if (List.class.isInstance(c.getResult())) {
@@ -118,7 +117,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
                             ParameterizedType typeCallOROb = (ParameterizedType) this.getClass().getGenericSuperclass();
                             ParameterizedType typeBeanORList = (ParameterizedType) typeCallOROb.getActualTypeArguments()[0];
                             /**
-                             * 二级泛型
+                             * two level gennic
                              */
                             Class<?> clazzResult = (Class) (typeBeanORList.getActualTypeArguments()[0]);
                             List l = new ArrayList();
