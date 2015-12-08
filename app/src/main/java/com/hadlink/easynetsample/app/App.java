@@ -23,7 +23,6 @@ public class App extends Application {
          */
         final NetConfig netConfig = new NetConfigBuilder()
                 .appContext(this)
-                .responseCacheDir("you_cache_dir_name")
                 .log(true)
                 .logTag("you_tag_name")
                 .printResponseBody(true)
