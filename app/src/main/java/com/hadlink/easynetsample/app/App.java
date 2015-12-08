@@ -26,7 +26,7 @@ public class App extends Application {
                 .responseCacheDir("you_cache_dir_name")
                 .log(true)
                 .logTag("you_tag_name")
-                .printResponseBody(false)
+                .printResponseBody(true)
                 .createNetConfig();
 
         NetUtils.setNetConfig(netConfig);

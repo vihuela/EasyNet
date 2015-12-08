@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.body() != null && response.body().error_code == 0) {
                     /**
                      * server api design is not a good return data redundancy may exist, we need to be screened
+                     * 服务端api设计可能不良好，存在返回数据之后需要重新拼装筛选
                      */
                     List<NewsResponse.ResultEntity> result = response.body().result;
                     List<News> newsList = new ArrayList<>();
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                     /**
                      * There may be a whole lot like this App interface, that the above code should write again?
+                     * 可能整个App存在很多这样子的接口，那不是以上代码都需要走一遍？
                      */
                 }
             }
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onFailure(Throwable t) {
                 /**
                  * You need to judge for themselves what type of error
+                 * 在retrofit2默认错误回调中，你需要自己去处理分析错误类型
                  */
                 if (t != null) {
                     if (t instanceof UnknownHostException || (t.getCause() != null && t.getCause() instanceof UnknownHostException)) {
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onSuccess(BaseList_1Response<News> newsBaseList1Response) {
                 /**
                  * Direct access,NO need to be screened
+                 * 直接拿到想要的bean对象，不需要筛选
                  */
                 List<News> result = newsBaseList1Response.getResult();
                 //
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onDispatchError(error, message);
                 /**
                  * error is enum ，A clear understanding of the wrong type
+                 * error是个枚举类型，可以自行判断
                  */
                 switch (error) {
                     case Internal:
