@@ -5,7 +5,8 @@ import com.hadlink.easynetsample.datamanager.bean.Joke;
 import com.hadlink.easynetsample.datamanager.bean.News;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_1Response;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_2Response;
-import com.hadlink.easynetsample.datamanager.net.response.NewsResponse;
+import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
+import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -18,7 +19,10 @@ public interface ApiOverview {
 
 
     @GET("onebox/news/query")
-    Call<NewsResponse> getNews(@Query("q") String content, @Query("key") String key);
+    Call<NewsResponseOrigin> getNewsOrigin(@Query("q") String content, @Query("key") String key);
+
+    @GET("onebox/news/query")
+    Call<NewsResponseUpdate> getNewsUpdate(@Query("q") String content, @Query("key") String key);
 
 
     @GET("onebox/news/query")

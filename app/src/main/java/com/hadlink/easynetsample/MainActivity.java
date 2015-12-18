@@ -10,7 +10,8 @@ import com.hadlink.easynetsample.datamanager.net.MyNet;
 import com.hadlink.easynetsample.datamanager.net.MyNetCallBack;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_1Response;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_2Response;
-import com.hadlink.easynetsample.datamanager.net.response.NewsResponse;
+import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
+import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -31,26 +32,32 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        before();
+        /*before1();*/
 
-        after1();
+        before2();
 
-        after2();
+        /*after1();
+
+        after2();*/
 
     }
 
-    private void before() {
-        Call<NewsResponse> originResponseCall = MyNet.get().getNews("普京", "20f453107e7739c9a363edb7507bd0ed");
-        originResponseCall.enqueue(new Callback<NewsResponse>() {
-            @Override public void onResponse(Response<NewsResponse> response, Retrofit retrofit) {
+
+    /**
+     * retrofit2原始用法
+     */
+    private void before1() {
+        Call<NewsResponseOrigin> originResponseCall = MyNet.get().getNewsOrigin("普京", "20f453107e7739c9a363edb7507bd0ed");
+        originResponseCall.enqueue(new Callback<NewsResponseOrigin>() {
+            @Override public void onResponse(Response<NewsResponseOrigin> response, Retrofit retrofit) {
                 if (response.body() != null && response.body().error_code == 0) {
                     /**
                      * server api design is not a good return data redundancy may exist, we need to be screened
                      * 服务端api设计可能不良好，存在返回数据之后需要重新拼装筛选
                      */
-                    List<NewsResponse.ResultEntity> result = response.body().result;
+                    List<NewsResponseOrigin.ResultEntity> result = response.body().result;
                     List<News> newsList = new ArrayList<>();
-                    for (NewsResponse.ResultEntity entity : result) {
+                    for (NewsResponseOrigin.ResultEntity entity : result) {
                         News news = new News();
                         news.content = entity.content;
                         news.full_title = entity.full_title;
@@ -84,6 +91,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 更清晰的错误分发用法
+     */
+    private void before2() {
+        Call<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
+        originResponseCall.enqueue(new MyNetCallBack<NewsResponseUpdate>() {
+            @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
+                List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
+            }
+
+            @Override public void onDispatchError(Error error, Object message) {
+                super.onDispatchError(error, message);
+            }
+        });
+    }
+
+    /**
+     * 适合多个有规律的接口抽取baseResponse用法
+     */
     private void after1() {
         Call<BaseList_1Response<News>> responseCall = MyNet.get().getNews_("普京", "20f453107e7739c9a363edb7507bd0ed");
         responseCall.enqueue(new MyNetCallBack<BaseList_1Response<News>>() {
