@@ -25,7 +25,7 @@ import retrofit.Retrofit;
 import rx.Subscriber;
 
 /**
- *compose Call and Observable callBack
+ * compose Call and Observable callBack
  */
 public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Callback<T>, CommonDispatchRequest<T> {
 
@@ -145,7 +145,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     }
 
     private void printLog(String s) {
-        Log.e(NetUtils.netConfig.LOG_TAG, s);
+        Log.e(NetUtils.netConfig.getLogTag(), s);
     }
 
 

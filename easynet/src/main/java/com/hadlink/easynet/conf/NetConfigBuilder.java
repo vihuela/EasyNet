@@ -1,19 +1,21 @@
 package com.hadlink.easynet.conf;
 
-import android.app.Application;
+import android.content.Context;
+import android.support.v4.util.ArrayMap;
 
 import com.hadlink.easynet.util.NetConfig;
 
 public class NetConfigBuilder {
 
-    private String response_cache= "lays_net_cache";
-    private int response_cache_size= 5000;
-    private int http_connect_timeout= 8000;
-    private int http_read_timeout= 5000;
-    private boolean print_body=true;
-    private boolean log= true;
+    private String response_cache = "lays_net_cache";
+    private int response_cache_size = 5000;
+    private int http_connect_timeout = 8000;
+    private int http_read_timeout = 5000;
+    private boolean print_body = true;
+    private boolean log = true;
     private String log_tag = "lays";
-    private Application app;
+    private Context appContext;
+    private ArrayMap<String, String> header;
 
     public NetConfigBuilder responseCacheDir(String response_cache) {
         this.response_cache = response_cache;
@@ -50,12 +52,17 @@ public class NetConfigBuilder {
         return this;
     }
 
-    public NetConfigBuilder appContext(Application app) {
-        this.app = app;
+    public NetConfigBuilder context(Context app) {
+        this.appContext = app.getApplicationContext();
+        return this;
+    }
+
+    public NetConfigBuilder header(ArrayMap<String, String> header) {
+        this.header = header;
         return this;
     }
 
     public NetConfig createNetConfig() {
-        return new NetConfig(response_cache, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, app);
+        return new NetConfig(response_cache, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, appContext, header);
     }
 }

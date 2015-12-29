@@ -13,19 +13,20 @@ import com.squareup.okhttp.ResponseBody;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okio.Buffer;
 
 
 public class OkHttpUtils {
-     final static String RESPONSE_CACHE = NetUtils.netConfig.RESPONSE_CACHE;
-     final static int RESPONSE_CACHE_SIZE = NetUtils.netConfig.RESPONSE_CACHE_SIZE;
-     final static int HTTP_CONNECT_TIMEOUT = NetUtils.netConfig.HTTP_CONNECT_TIMEOUT;
-     final static int HTTP_READ_TIMEOUT = NetUtils.netConfig.HTTP_READ_TIMEOUT;
-     static OkHttpClient singleton;
+    final static String RESPONSE_CACHE = NetUtils.netConfig.RESPONSE_CACHE;
+    final static int RESPONSE_CACHE_SIZE = NetUtils.netConfig.RESPONSE_CACHE_SIZE;
+    final static int HTTP_CONNECT_TIMEOUT = NetUtils.netConfig.HTTP_CONNECT_TIMEOUT;
+    final static int HTTP_READ_TIMEOUT = NetUtils.netConfig.HTTP_READ_TIMEOUT;
+    static OkHttpClient singleton;
 
-     static OkHttpClient getInstance(final Context context) {
+    static OkHttpClient getInstance(final Context context) {
         if (singleton == null) {
             synchronized (OkHttpUtils.class) {
                 if (singleton == null) {
@@ -33,15 +34,19 @@ public class OkHttpUtils {
                     singleton.setCache(new Cache(new File(context.getCacheDir(), RESPONSE_CACHE), RESPONSE_CACHE_SIZE));
                     singleton.setConnectTimeout(HTTP_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
                     singleton.setReadTimeout(HTTP_READ_TIMEOUT, TimeUnit.MILLISECONDS);
+
                     Interceptor interceptor = new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
-                            Request newRequest = chain
-                                    .request()
-                                    .newBuilder()
-                                    .addHeader("User-Agent", "android")
-                                    .build();
-                            return chain.proceed(newRequest);
+                            Request.Builder builder = chain.request().newBuilder();
+
+                            for (Map.Entry<String, String> entry : NetUtils.netConfig.header.entrySet()) {
+                                if (!TextUtils.isEmpty(entry.getKey()) && !TextUtils.isEmpty(entry.getValue())) {
+                                    builder.addHeader(entry.getKey(), entry.getValue()).build();
+                                }
+                            }
+
+                            return chain.proceed(builder.build());
                         }
                     };
                     singleton.interceptors().add(interceptor);
@@ -53,7 +58,7 @@ public class OkHttpUtils {
         return singleton;
     }
 
-     static String bodyToString(final Request request) {
+    static String bodyToString(final Request request) {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();
@@ -64,7 +69,7 @@ public class OkHttpUtils {
         }
     }
 
-     static class LoggingInterceptor implements Interceptor {
+    static class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             long t1 = System.nanoTime();
