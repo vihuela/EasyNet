@@ -13,7 +13,7 @@ import java.util.Date;
 public enum GsonUtils {
     INSTANCE;
 
-    public Gson gson;
+    private final Gson gson;
 
     GsonUtils() {
         GsonBuilder builder = new GsonBuilder();

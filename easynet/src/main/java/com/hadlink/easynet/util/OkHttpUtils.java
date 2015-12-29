@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 import okio.Buffer;
 
 
-public class OkHttpUtils {
-    final static String RESPONSE_CACHE = NetUtils.netConfig.RESPONSE_CACHE;
-    final static int RESPONSE_CACHE_SIZE = NetUtils.netConfig.RESPONSE_CACHE_SIZE;
-    final static int HTTP_CONNECT_TIMEOUT = NetUtils.netConfig.HTTP_CONNECT_TIMEOUT;
-    final static int HTTP_READ_TIMEOUT = NetUtils.netConfig.HTTP_READ_TIMEOUT;
-    static OkHttpClient singleton;
+class OkHttpUtils {
+    private final static String RESPONSE_CACHE = NetUtils.netConfig.RESPONSE_CACHE;
+    private final static int RESPONSE_CACHE_SIZE = NetUtils.netConfig.RESPONSE_CACHE_SIZE;
+    private final static int HTTP_CONNECT_TIMEOUT = NetUtils.netConfig.HTTP_CONNECT_TIMEOUT;
+    private final static int HTTP_READ_TIMEOUT = NetUtils.netConfig.HTTP_READ_TIMEOUT;
+    private static OkHttpClient singleton;
 
     static OkHttpClient getInstance(final Context context) {
         if (singleton == null) {
@@ -58,7 +58,7 @@ public class OkHttpUtils {
         return singleton;
     }
 
-    static String bodyToString(final Request request) {
+    private static String bodyToString(final Request request) {
         try {
             final Request copy = request.newBuilder().build();
             final Buffer buffer = new Buffer();
@@ -69,7 +69,7 @@ public class OkHttpUtils {
         }
     }
 
-    static class LoggingInterceptor implements Interceptor {
+    private static class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             long t1 = System.nanoTime();

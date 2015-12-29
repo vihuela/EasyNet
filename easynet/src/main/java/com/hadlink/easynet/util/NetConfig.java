@@ -16,7 +16,7 @@ public class NetConfig {
     boolean PRINT_BODY = true;
     boolean LOG = true;
     Context app = null;
-    ArrayMap<String, String> header;
+    final ArrayMap<String, String> header;
 
     public NetConfig(String RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, ArrayMap<String, String> header) {
         this.RESPONSE_CACHE = RESPONSE_CACHE;

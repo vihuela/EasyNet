@@ -9,13 +9,13 @@ import retrofit.RxJavaCallAdapterFactory;
 /**
  * retain retrofit singleton
  */
-public class RetrofitUtils {
+class RetrofitUtils {
     /**
      * baseUrl end add "/"
      * path end no add "/"
      */
 
-    static Retrofit singleton;
+    private static Retrofit singleton;
 
 
     static <T> T createApi(Context context, Class<T> clazz, String host) {

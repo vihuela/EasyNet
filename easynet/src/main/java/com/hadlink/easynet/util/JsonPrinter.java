@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * json printer helper
  */
-public class JsonPrinter {
+class JsonPrinter {
 
     private static final char TOP_LEFT_CORNER = '[';
     private static final String DOUBLE_DIVIDER = "--------------------------------------------------";
@@ -43,11 +43,12 @@ public class JsonPrinter {
                 String message = jsonArray.toString(JSON_INDENT);
                 d(message);
             }
-        } catch (JSONException e) {
+        } catch (JSONException ignored) {
+
         }
     }
 
-    public static void d(String message, Object... args) {
+    private static void d(String message, Object... args) {
         log(message, args);
     }
 
