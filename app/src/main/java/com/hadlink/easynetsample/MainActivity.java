@@ -95,16 +95,29 @@ public class MainActivity extends AppCompatActivity {
      * 更清晰的错误分发用法
      */
     private void before2() {
-        Call<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
-        originResponseCall.enqueue(new MyNetCallBack<NewsResponseUpdate>() {
-            @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
-                List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
-            }
+        /*Observable<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
+        NetUtils.getMainThreadObservable(originResponseCall).
+                subscribe(new MyNetCallBack<NewsResponseUpdate>() {
+                    @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
+                        List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
+                    }
 
-            @Override public void onDispatchError(Error error, Object message) {
-                super.onDispatchError(error, message);
-            }
-        });
+                    @Override public void onDispatchError(Error error, Object message) {
+                        super.onDispatchError(error, message);
+                    }
+                });*/
+        Call<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
+        originResponseCall.
+                enqueue(new MyNetCallBack<NewsResponseUpdate>() {
+                    @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
+                        List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
+                    }
+
+                    @Override public void onDispatchError(Error error, Object message) {
+                        super.onDispatchError(error, message);
+                    }
+                });
+
     }
 
     /**

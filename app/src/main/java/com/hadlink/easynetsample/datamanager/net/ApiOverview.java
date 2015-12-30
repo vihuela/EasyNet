@@ -21,7 +21,7 @@ public interface ApiOverview {
     @GET("onebox/news/query")
     Call<NewsResponseOrigin> getNewsOrigin(@Query("q") String content, @Query("key") String key);
 
-    @GET("onebox/news/query")
+    @GET("http://usrapi.imchehu.cn/test/returnCode?returnCode=500")//404 http://usrapi.imchehu.cn//questio/getQuestionDetails?userID=171410&code=0&questionID=520120
     Call<NewsResponseUpdate> getNewsUpdate(@Query("q") String content, @Query("key") String key);
 
 

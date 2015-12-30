@@ -2,24 +2,22 @@ package com.hadlink.easynet.impl;
 
 import android.util.Log;
 
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LinkedTreeMap;
+import com.hadlink.easynet.impl.exception.ExceptionParser;
+import com.hadlink.easynet.impl.exception.InternalExceptionParser;
+import com.hadlink.easynet.impl.exception.NetExceptionParser;
+import com.hadlink.easynet.impl.exception.ServerExceptionParser;
+import com.hadlink.easynet.impl.exception.UnknowExceptionParser;
 import com.hadlink.easynet.util.GsonUtils;
 import com.hadlink.easynet.util.NetUtils;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
-import java.net.ConnectException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
-import retrofit.HttpException;
 import retrofit.Response;
 import retrofit.Retrofit;
 import rx.Subscriber;
@@ -46,23 +44,23 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     }
 
     @Override public final void onError(Throwable e) {
-        if (e != null && e instanceof HttpException) {
-            onDispatchError(Error.Server, ((HttpException) e).code() + "," + ((HttpException) e).message());
-        } else if (e != null && (e instanceof UnknownHostException || e instanceof ConnectException || e instanceof
-                SocketTimeoutException)) {
-            onDispatchError(Error.NetWork, e.getMessage());
-        } else if (e != null && e instanceof JsonSyntaxException) {
-            onDispatchError(Error.Internal, e.getMessage());
-        } else {
-            if (e instanceof IOException && IO_EXCEPTION.equalsIgnoreCase(e.getMessage()) ||
-                    e instanceof SocketException && SOCKET_EXCEPTION.equalsIgnoreCase(e.getMessage())) {
-                //cancel request
-                printLog(e.getMessage());
-                return;
+
+        NetExceptionParser firstParser = new NetExceptionParser();
+        ServerExceptionParser secondParser = new ServerExceptionParser();
+        InternalExceptionParser thirdParser = new InternalExceptionParser();
+        UnknowExceptionParser fourthParser = new UnknowExceptionParser();
+
+        thirdParser.setNextParser(fourthParser);
+        secondParser.setNextParser(thirdParser);
+        firstParser.setNextParser(secondParser);
+
+        firstParser.handleException(e, new ExceptionParser.IHandler() {
+            @Override public void onHandler(Error error, String message) {
+                onDispatchError(error, message);
             }
-            onDispatchError(Error.UnKnow, e != null ? e.getMessage() : "unKnowError");
-        }
+        });
     }
+
 
     @Override public final void onNext(T t) {
         onDispatchSuccess(t);
@@ -82,21 +80,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
 
     @Override public final void onFailure(Throwable t) {
 
-        if (t != null &&
-                (t instanceof UnknownHostException || t instanceof ConnectException || t instanceof SocketTimeoutException ||
-                        (t.getCause() != null && t.getCause() instanceof UnknownHostException))) {
-            onDispatchError(Error.NetWork, t.getMessage());
-        } else if (t != null && t instanceof JsonSyntaxException) {
-            onDispatchError(Error.Internal, t.getMessage());
-        } else {
-            if (t instanceof IOException && IO_EXCEPTION.equalsIgnoreCase(t.getMessage()) ||
-                    t instanceof SocketException && SOCKET_EXCEPTION.equalsIgnoreCase(t.getMessage())) {
-                //cancel request
-                printLog(t.getMessage());
-                return;
-            }
-            onDispatchError(Error.UnKnow, t != null ? t.getMessage() : "unKnowError");
-        }
+        onError(t);
     }
 
     @Override public abstract void onDispatchError(Error error, Object message);
@@ -145,10 +129,20 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     }
 
     private void printLog(String s) {
-        Log.e(NetUtils.netConfig.getLogTag(), s);
+        if (NetUtils.netConfig.isLog())
+            Log.e(NetUtils.netConfig.getLogTag(), s);
     }
 
-
     public abstract void onSuccess(T t);
+
+    private class ErrorBean {
+        public boolean satisfy;
+        public String message;
+
+        public ErrorBean(boolean satisfy, String message) {
+            this.satisfy = satisfy;
+            this.message = message;
+        }
+    }
 
 }

@@ -27,6 +27,7 @@ public class App extends Application {
         final NetConfig netConfig = new NetConfigBuilder()
                 .context(this)
                 .log(true)
+               .readTimeout(2000)
                 .logTag("you_tag_name")
                 .printResponseBody(true)
                 .header(header)

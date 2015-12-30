@@ -8,6 +8,7 @@ import android.support.v4.util.ArrayMap;
  * Net Config
  */
 public class NetConfig {
+    final ArrayMap<String, String> header;
     String LOG_TAG = "lays";
     String RESPONSE_CACHE = "lays_net_cache";
     int RESPONSE_CACHE_SIZE = 5000;
@@ -16,7 +17,6 @@ public class NetConfig {
     boolean PRINT_BODY = true;
     boolean LOG = true;
     Context app = null;
-    final ArrayMap<String, String> header;
 
     public NetConfig(String RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, ArrayMap<String, String> header) {
         this.RESPONSE_CACHE = RESPONSE_CACHE;
@@ -30,7 +30,12 @@ public class NetConfig {
         this.header = header;
         JsonPrinter.TAG = this.LOG_TAG;
     }
-    public String getLogTag(){
+
+    public String getLogTag() {
         return this.LOG_TAG;
+    }
+
+    public boolean isLog() {
+        return this.LOG;
     }
 }

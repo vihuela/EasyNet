@@ -18,7 +18,7 @@ public abstract class NetUtils {
     /**
      * retain run mainThread ob
      */
-    public static <T> Observable<T> getObservable(Observable<T> observable) {
+    public static <T> Observable<T> getMainThreadObservable(Observable<T> observable) {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
