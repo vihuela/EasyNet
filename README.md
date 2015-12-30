@@ -17,14 +17,20 @@
 > *In Application.onCreate()*
     
     
-    final NetConfig netConfig = new NetConfigBuilder()
-        .appContext(this)
-        .responseCacheDir("you_cache_dir_name")
-        .log(true)
-        .logTag("you_tag_name")
-        .printResponseBody(false)
-        .createNetConfig();
-    NetUtils.setNetConfig(netConfig)
+    ArrayMap<String, String> header = new ArrayMap<>();
+            header.put("User-Agent", "android");
+            /**
+             * net config
+             */
+            final NetConfig netConfig = new NetConfigBuilder()
+                    .context(this)
+                    .log(true)
+                    .logTag("you_tag_name")
+                    .printResponseBody(true)
+                    .header(header)
+                    .createNetConfig();
+    
+            NetUtils.setNetConfig(netConfig);
     
 ### Second Step ###
 > *config your baseResponse ( **implements CommonResponse** )*
@@ -135,7 +141,7 @@
             12-08 07:41:54.625 9444-9493/com.hadlink.easynetsample D/you_tag_name: --------------REQUEST END--------------
 # setup
 
-    compile 'com.hadlink:easynet:1.0.0'
+    compile 'com.hadlink:easynet:1.0.1'
     
 # author
 
