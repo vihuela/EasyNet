@@ -135,14 +135,4 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
 
     public abstract void onSuccess(T t);
 
-    private class ErrorBean {
-        public boolean satisfy;
-        public String message;
-
-        public ErrorBean(boolean satisfy, String message) {
-            this.satisfy = satisfy;
-            this.message = message;
-        }
-    }
-
 }
