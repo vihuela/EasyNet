@@ -9,9 +9,10 @@ public abstract class ExceptionParser {
     protected ExceptionParser nextParser;
 
     public void handleException(Throwable e, IHandler handler) {
+        //e should not be null ...
         if (getNextParser() != null) {
             if (!handler(e, handler)) {
-                if (!handler(e.getCause(), handler)) {
+                if (!handler(e != null ? e.getCause() : null, handler)) {
                     getNextParser().handleException(e, handler);
                 }
             }
