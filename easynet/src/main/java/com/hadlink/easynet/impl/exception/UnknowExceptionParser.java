@@ -6,7 +6,9 @@ import com.hadlink.easynet.impl.CommonDispatchRequest;
 
 public class UnknowExceptionParser extends ExceptionParser {
 
-    
+    /**
+     * must return true
+     */
     @Override protected boolean handler(Throwable e, IHandler handler) {
         String s = e != null ? !TextUtils.isEmpty(e.getMessage()) ? e.getMessage() : e.getClass().getSimpleName() : "unKnow";
         handler.onHandler(CommonDispatchRequest.Error.UnKnow, s);

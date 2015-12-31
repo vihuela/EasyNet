@@ -50,6 +50,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
         InternalExceptionParser thirdParser = new InternalExceptionParser();
         UnknowExceptionParser fourthParser = new UnknowExceptionParser();
 
+        fourthParser.setNextParser(null);
         thirdParser.setNextParser(fourthParser);
         secondParser.setNextParser(thirdParser);
         firstParser.setNextParser(secondParser);
