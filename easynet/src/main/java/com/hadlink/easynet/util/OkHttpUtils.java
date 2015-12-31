@@ -39,12 +39,12 @@ class OkHttpUtils {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request.Builder builder = chain.request().newBuilder();
-
-                            for (Map.Entry<String, String> entry : NetUtils.netConfig.header.entrySet()) {
-                                if (!TextUtils.isEmpty(entry.getKey()) && !TextUtils.isEmpty(entry.getValue())) {
-                                    builder.addHeader(entry.getKey(), entry.getValue()).build();
+                            if (NetUtils.netConfig.header != null)
+                                for (Map.Entry<String, String> entry : NetUtils.netConfig.header.entrySet()) {
+                                    if (!TextUtils.isEmpty(entry.getKey()) && !TextUtils.isEmpty(entry.getValue())) {
+                                        builder.addHeader(entry.getKey(), entry.getValue()).build();
+                                    }
                                 }
-                            }
 
                             return chain.proceed(builder.build());
                         }
