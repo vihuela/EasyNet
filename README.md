@@ -141,7 +141,7 @@
             12-08 07:41:54.625 9444-9493/com.hadlink.easynetsample D/you_tag_name: --------------REQUEST END--------------
 # setup
 
-    compile 'com.hadlink:easynet:1.0.3'
+    compile 'com.hadlink:easynet:1.0.4'
     
 # changeLog
     
@@ -149,7 +149,7 @@
      
 * v1.0.1 ：add header config
      
-* v1.0.2 & v1.0.3 ：fix update error dispatch bug
+* v1.0.2 ~ v1.0.4 ：fix update error dispatch bug
     
 # author
 
