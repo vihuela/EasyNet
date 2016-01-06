@@ -4,14 +4,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.hadlink.easynet.util.NetUtils;
+import com.hadlink.easynetsample.datamanager.bean.ImageDetail;
 import com.hadlink.easynetsample.datamanager.bean.Joke;
 import com.hadlink.easynetsample.datamanager.bean.News;
 import com.hadlink.easynetsample.datamanager.net.MyNet;
 import com.hadlink.easynetsample.datamanager.net.MyNetCallBack;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_1Response;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_2Response;
+import com.hadlink.easynetsample.datamanager.net.response.ImageListResponse;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
-import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import rx.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,11 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         /*before1();*/
 
-        before2();
+        /*before2();*/
 
         /*after1();
 
         after2();*/
+        after1();
 
     }
 
@@ -95,22 +99,12 @@ public class MainActivity extends AppCompatActivity {
      * 更清晰的错误分发用法
      */
     private void before2() {
-        /*Observable<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
-        NetUtils.getMainThreadObservable(originResponseCall).
-                subscribe(new MyNetCallBack<NewsResponseUpdate>() {
-                    @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
-                        List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
-                    }
 
-                    @Override public void onDispatchError(Error error, Object message) {
-                        super.onDispatchError(error, message);
-                    }
-                });*/
-        Call<NewsResponseUpdate> originResponseCall = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
-        originResponseCall.
-                enqueue(new MyNetCallBack<NewsResponseUpdate>() {
-                    @Override public void onSuccess(NewsResponseUpdate newsResponseOrigin) {
-                        List<NewsResponseUpdate.ResultEntity> result = newsResponseOrigin.result;
+        Observable<ImageListResponse<ImageDetail>> imageList = MyNet.get().getImageList("美女", 1);
+        NetUtils.getMainThreadObservable(imageList)
+                .subscribe(new MyNetCallBack<ImageListResponse<ImageDetail>>() {
+                    @Override public void onSuccess(ImageListResponse<ImageDetail> imageDetailImageListResponse) {
+                        List<ImageDetail> result = imageDetailImageListResponse.getResult();
                     }
 
                     @Override public void onDispatchError(Error error, Object message) {

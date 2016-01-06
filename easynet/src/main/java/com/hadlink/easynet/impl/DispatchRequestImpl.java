@@ -96,24 +96,30 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
                 /**
                  *  have list
                  */
-                if (c.getResult() != null) {
-                    if (List.class.isInstance(c.getResult())) {
-                        try {
-                            ParameterizedType typeCallOROb = (ParameterizedType) this.getClass().getGenericSuperclass();
-                            ParameterizedType typeBeanORList = (ParameterizedType) typeCallOROb.getActualTypeArguments()[0];
-                            /**
-                             * two level gennic
-                             */
-                            Class<?> clazzResult = (Class) (typeBeanORList.getActualTypeArguments()[0]);
-                            List l = new ArrayList();
-                            List<LinkedTreeMap> list = (List<LinkedTreeMap>) c.getResult();
-                            for (LinkedTreeMap map : list) {
-                                JSONObject ob = new JSONObject(map);
-                                l.add(GsonUtils.INSTANCE.get().fromJson(ob.toString(), clazzResult));
+                if (c.getResult() != null && List.class.isInstance(c.getResult())) {
+                    /**
+                     * gson bug
+                     */
+                    if (((List) c.getResult()).size() > 0) {
+                        Object first = ((List) c.getResult()).get(0);
+                        if (LinkedTreeMap.class.isInstance(first)) {
+                            try {
+                                ParameterizedType typeCallOROb = (ParameterizedType) this.getClass().getGenericSuperclass();
+                                ParameterizedType typeBeanORList = (ParameterizedType) typeCallOROb.getActualTypeArguments()[0];
+                                /**
+                                 * two level gennic
+                                 */
+                                Class<?> clazzResult = (Class) (typeBeanORList.getActualTypeArguments()[0]);
+                                List l = new ArrayList();
+                                List<LinkedTreeMap> list = (List<LinkedTreeMap>) c.getResult();
+                                for (LinkedTreeMap map : list) {
+                                    JSONObject ob = new JSONObject(map);
+                                    l.add(GsonUtils.INSTANCE.get().fromJson(ob.toString(), clazzResult));
+                                }
+                                c.setResult(l);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            c.setResult(l);
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
                 }
