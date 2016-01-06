@@ -149,9 +149,9 @@
      
 * v1.0.1 ：add header config
      
-* v1.0.2 ~ v1.0.5 ：fix error dispatch bug
+* v1.0.2 ~ v1.0.6 ：fix error dispatch bug
 
-* v1.0.6 ：optimization success callback logic
+* v1.0.7 ：optimization success callback logic
 
     
 # author

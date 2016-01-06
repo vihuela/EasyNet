@@ -7,10 +7,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public abstract class NetUtils {
-    public static NetConfig netConfig ;
-    public static void setNetConfig(NetConfig netConf){
+    public static NetConfig netConfig;
+
+    public static void setNetConfig(NetConfig netConf) {
         NetUtils.netConfig = netConf;
     }
+
     public static <T> T createApi(Class<T> cls, String host) {
         return RetrofitUtils.createApi(netConfig.app, cls, host);
     }
@@ -22,6 +24,15 @@ public abstract class NetUtils {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static <T> Observable.Transformer<T, T> applySchedulers() {
+        return new Observable.Transformer<T, T>() {
+            @Override public Observable<T> call(Observable<T> observable) {
+                return observable.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 
     /**
