@@ -141,7 +141,7 @@
             12-08 07:41:54.625 9444-9493/com.hadlink.easynetsample D/you_tag_name: --------------REQUEST END--------------
 # setup
 
-    compile 'com.hadlink:easynet:1.0.6'
+    compile 'com.hadlink:easynet:1.1.0'
     
 # changeLog
     
