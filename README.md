@@ -151,7 +151,7 @@
      
 * v1.0.2 ~ v1.0.6 ：fix error dispatch bug
 
-* v1.0.7 ：optimization success callback logic
+* v1.1.0 ：optimization success callback logic
 
     
 # author
