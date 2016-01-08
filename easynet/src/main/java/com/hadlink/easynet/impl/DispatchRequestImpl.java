@@ -28,15 +28,6 @@ import rx.Subscriber;
  */
 public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Callback<T>, CommonDispatchRequest<T> {
 
-    private Object result;
-
-    public DispatchRequestImpl() {
-    }
-
-    protected Object getResult() {
-        return result;
-    }
-
     /**
      * rx
      */
@@ -96,7 +87,6 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
 
     @SuppressWarnings("all")
     @Override public final void onDispatchSuccess(T t) {
-        this.result = t;
 
         if (t != null && t instanceof CommonResponse) {
             CommonResponse c = (CommonResponse) t;
