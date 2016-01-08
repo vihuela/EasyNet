@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.HttpException;
 import retrofit.Response;
 import retrofit.Retrofit;
 import rx.Subscriber;
@@ -44,6 +45,13 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     }
 
     @Override public final void onError(Throwable e) {
+
+        /**
+         * no found cache
+         */
+        if (e != null && e instanceof HttpException && ((HttpException) e).code() == 504) {
+
+        }
 
         NetExceptionParser firstParser = new NetExceptionParser();
         ServerExceptionParser secondParser = new ServerExceptionParser();
