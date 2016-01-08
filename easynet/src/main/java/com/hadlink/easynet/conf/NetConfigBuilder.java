@@ -1,9 +1,10 @@
 package com.hadlink.easynet.conf;
 
 import android.content.Context;
-import android.support.v4.util.ArrayMap;
 
 import com.hadlink.easynet.util.NetConfig;
+
+import java.util.HashMap;
 
 public class NetConfigBuilder {
 
@@ -15,7 +16,7 @@ public class NetConfigBuilder {
     private boolean log = true;
     private String log_tag = "lays";
     private Context appContext;
-    private ArrayMap<String, String> header;
+    private HashMap<String, String> header;
 
     public NetConfigBuilder responseCacheDir(String response_cache) {
         this.response_cache = response_cache;
@@ -57,7 +58,7 @@ public class NetConfigBuilder {
         return this;
     }
 
-    public NetConfigBuilder header(ArrayMap<String, String> header) {
+    public NetConfigBuilder header(HashMap<String, String> header) {
         this.header = header;
         return this;
     }

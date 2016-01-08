@@ -1,14 +1,15 @@
 package com.hadlink.easynet.util;
 
 import android.content.Context;
-import android.support.v4.util.ArrayMap;
+
+import java.util.HashMap;
 
 
 /**
  * Net Config
  */
 public class NetConfig {
-    final ArrayMap<String, String> header;
+    final HashMap<String, String> header;
     String LOG_TAG = "lays";
     String RESPONSE_CACHE = "lays_net_cache";
     int RESPONSE_CACHE_SIZE = 5000;
@@ -18,7 +19,7 @@ public class NetConfig {
     boolean LOG = true;
     Context app = null;
 
-    public NetConfig(String RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, ArrayMap<String, String> header) {
+    public NetConfig(String RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, HashMap<String, String> header) {
         this.RESPONSE_CACHE = RESPONSE_CACHE;
         this.RESPONSE_CACHE_SIZE = RESPONSE_CACHE_SIZE;
         this.HTTP_CONNECT_TIMEOUT = HTTP_CONNECT_TIMEOUT;
