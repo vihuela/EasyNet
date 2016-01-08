@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         /*after1();
 
         after2();*/
-        after1();
-
+        /*after1();*/
+        before2();
     }
 
 

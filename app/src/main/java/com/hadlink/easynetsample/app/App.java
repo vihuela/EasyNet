@@ -3,6 +3,7 @@ package com.hadlink.easynetsample.app;
 import android.app.Application;
 import android.content.Context;
 
+import com.hadlink.easynet.conf.CacheType;
 import com.hadlink.easynet.conf.NetConfigBuilder;
 import com.hadlink.easynet.util.NetConfig;
 import com.hadlink.easynet.util.NetUtils;
@@ -30,6 +31,7 @@ public class App extends Application {
                 .log(true)
                 .readTimeout(2000)
                 .logTag("you_tag_name")
+                .cacheType(CacheType.NETWORK_ELSE_CACHED)
                 .printResponseBody(true)
                 .header(header)
                 .createNetConfig();
