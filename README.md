@@ -142,7 +142,7 @@
 # setup
 
     compile 'com.hadlink:easynet:1.1.0'
-    compile 'com.hadlink:easynet:1.2.1_SNAPSHOT' (Retrofit & OKHttp lib to last version)
+    compile 'com.hadlink:easynet:1.2.2_SNAPSHOT' (Retrofit & OKHttp lib to last version and some feature)
     
 # changeLog
     
