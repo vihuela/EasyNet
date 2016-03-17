@@ -5,7 +5,7 @@ import com.hadlink.easynet.impl.CommonResponse;
 import java.util.List;
 
 /**
- * 针对接口格式和需要的数据在bean内部作一次数据判断
+ * 针对接口格式和需要的数据在bean内部作一次数据判断，泛型是你需要的数据
  */
 public class NewsResponseUpdate implements CommonResponse<List<NewsResponseUpdate.ResultEntity>> {
 
