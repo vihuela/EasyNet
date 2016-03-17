@@ -2,7 +2,7 @@ package com.hadlink.easynet.util;
 
 import android.content.Context;
 
-import com.hadlink.easynet.conf.CacheType;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,13 +18,14 @@ public class NetConfig {
     int RESPONSE_CACHE_SIZE;
     int HTTP_CONNECT_TIMEOUT;
     int HTTP_READ_TIMEOUT;
-    boolean PRINT_BODY = true;
-    boolean LOG = true;
-    Context app = null;
-    CacheType cacheType;
+    int MAX_CACHE_AGE;
+    boolean PRINT_BODY;
+    boolean LOG;
+    Context app;
+    Gson gson;
 
-
-    public NetConfig(File RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, HashMap<String, String> header,CacheType cacheType) {
+    public NetConfig(File RESPONSE_CACHE, int MAX_CACHE_AGE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, HashMap<String, String> header,Gson gson) {
+        this.MAX_CACHE_AGE = MAX_CACHE_AGE;
         this.RESPONSE_CACHE = RESPONSE_CACHE;
         this.RESPONSE_CACHE_SIZE = RESPONSE_CACHE_SIZE;
         this.HTTP_CONNECT_TIMEOUT = HTTP_CONNECT_TIMEOUT;
@@ -34,7 +35,7 @@ public class NetConfig {
         this.LOG_TAG = LOG_TAG;
         this.app = app;
         this.header = header;
-        this.cacheType = cacheType;
+        this.gson = gson;
         JsonPrinter.TAG = this.LOG_TAG;
     }
 

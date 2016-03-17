@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.hadlink.easynet.conf.ErrorInfo;
 import com.hadlink.easynet.util.NetUtils;
 import com.hadlink.easynetsample.datamanager.bean.ImageDetail;
 import com.hadlink.easynetsample.datamanager.bean.Joke;
@@ -14,16 +15,17 @@ import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_1Response
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_2Response;
 import com.hadlink.easynetsample.datamanager.net.response.ImageListResponse;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
+import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,14 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*before1();*/
-
-        /*before2();*/
-
-        /*after1();
-
-        after2();*/
-        /*after1();*/
-        before2();
+        after1();
     }
 
 
@@ -53,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private void before1() {
         Call<NewsResponseOrigin> originResponseCall = MyNet.get().getNewsOrigin("普京", "20f453107e7739c9a363edb7507bd0ed");
         originResponseCall.enqueue(new Callback<NewsResponseOrigin>() {
-            @Override public void onResponse(Response<NewsResponseOrigin> response, Retrofit retrofit) {
+            @Override public void onResponse(Call<NewsResponseOrigin> call, Response<NewsResponseOrigin> response) {
+                //数据code正确时
                 if (response.body() != null && response.body().error_code == 0) {
                     /**
                      * server api design is not a good return data redundancy may exist, we need to be screened
@@ -78,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            @Override public void onFailure(Throwable t) {
+            @Override public void onFailure(Call<NewsResponseOrigin> call, Throwable t) {
                 /**
                  * You need to judge for themselves what type of error
                  * 在retrofit2默认错误回调中，你需要自己去处理分析错误类型
@@ -90,7 +86,47 @@ public class MainActivity extends AppCompatActivity {
                         //json parse error
                     }
                 }
+            }
+        });
+    }
 
+    /**
+     * 针对原始改进之后的用法
+     */
+    private void after1() {
+        Call<NewsResponseUpdate> responseUpdate = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
+        responseUpdate.enqueue(new MyNetCallBack<NewsResponseUpdate>("eventTag") {
+            @Override public void onSuccess(NewsResponseUpdate responseUpdate) {
+                //仅有效数据时才回调
+                List<NewsResponseUpdate.ResultEntity> result = responseUpdate.getResult();
+            }
+
+            @Override public void onDispatchError(Error error, ErrorInfo e) {
+                switch (error) {
+                    case Internal:
+                        Toast(e.getObject().toString());
+                        break;
+                    case Invalid:
+                        /**
+                         * 有返回数据但是是无效的
+                         */
+                        NewsResponseUpdate result = e.getObject();
+
+                        break;
+                    case NetWork:
+                        Toast(e.getObject().toString());
+                        break;
+                    case Server:
+                        Toast(e.getObject().toString());
+                        break;
+                    case UnKnow:
+                        Toast(e.getObject().toString());
+                        break;
+                }
+                /**
+                 * 可以统一底层事件tag分发，也可以在这里具体判断
+                 */
+                super.onDispatchError(error, e);
             }
         });
     }
@@ -98,16 +134,17 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 更清晰的错误分发用法
      */
-    private void before2() {
+    private void extra1() {
 
         Observable<ImageListResponse<ImageDetail>> imageList = MyNet.get().getImageList("美女", 1);
         NetUtils.getMainThreadObservable(imageList)
-                .subscribe(new MyNetCallBack<ImageListResponse<ImageDetail>>() {
+                .subscribe(new MyNetCallBack<ImageListResponse<ImageDetail>>("abc") {
+
                     @Override public void onSuccess(ImageListResponse<ImageDetail> imageDetailImageListResponse) {
                         List<ImageDetail> result = imageDetailImageListResponse.getResult();
                     }
 
-                    @Override public void onDispatchError(Error error, Object message) {
+                    @Override public void onDispatchError(Error error, ErrorInfo message) {
                         super.onDispatchError(error, message);
                     }
                 });
@@ -117,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 适合多个有规律的接口抽取baseResponse用法
      */
-    private void after1() {
+    private void extra2() {
         Call<BaseList_1Response<News>> responseCall = MyNet.get().getNews_("普京", "20f453107e7739c9a363edb7507bd0ed");
         responseCall.enqueue(new MyNetCallBack<BaseList_1Response<News>>() {
 
@@ -131,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 //
             }
 
-            @Override public void onDispatchError(Error error, Object message) {
+            @Override public void onDispatchError(Error error, ErrorInfo message) {
                 super.onDispatchError(error, message);
                 /**
                  * error is enum ，A clear understanding of the wrong type
@@ -147,10 +184,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void after2() {
+    private void extra3() {
         Call<BaseList_2Response<Joke>> responseCall = MyNet.get().getJokes();
         responseCall.enqueue(new MyNetCallBack<BaseList_2Response<Joke>>() {
-            @Override public void onDispatchError(Error error, Object message) {
+            @Override public void onDispatchError(Error error, ErrorInfo message) {
                 super.onDispatchError(error, message);
             }
 

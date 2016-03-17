@@ -1,11 +1,13 @@
 package com.hadlink.easynet.impl;
 
 
+import com.hadlink.easynet.conf.ErrorInfo;
+
 public interface CommonDispatchRequest<T> {
     String IO_EXCEPTION = "Canceled";
     String SOCKET_EXCEPTION = "Socket closed";
 
-    void onDispatchError(Error error, Object message);
+    void onDispatchError(Error error, ErrorInfo message);
 
     void onDispatchSuccess(T t);
 

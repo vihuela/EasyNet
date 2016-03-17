@@ -5,9 +5,9 @@ import com.hadlink.easynet.impl.CommonResponse;
 import java.util.List;
 
 /**
- * 以下为GsonFormat生成的bean
+ * 针对接口格式和需要的数据在bean内部作一次数据判断
  */
-public class NewsResponseUpdate implements CommonResponse {
+public class NewsResponseUpdate implements CommonResponse<List<NewsResponseUpdate.ResultEntity>> {
 
 
     public String reason;
@@ -15,14 +15,18 @@ public class NewsResponseUpdate implements CommonResponse {
 
     public List<ResultEntity> result;
 
-    @Override public Object getResult() {
-        return null;
+    @Override public List<ResultEntity> getResult() {
+        return result;
     }
 
-    @Override public void setResult(Object o) {
-
+    @Override public void setResult(List<ResultEntity> resultEntities) {
+        this.result = resultEntities;
     }
 
+
+    /**
+     * 指定返回正确格式
+     */
     @Override public boolean isValid() {
         return error_code == 0;
     }

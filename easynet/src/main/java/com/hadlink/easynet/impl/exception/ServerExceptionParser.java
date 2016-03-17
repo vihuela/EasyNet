@@ -4,7 +4,8 @@ import android.text.TextUtils;
 
 import com.hadlink.easynet.impl.CommonDispatchRequest;
 
-import retrofit.HttpException;
+import retrofit2.adapter.rxjava.HttpException;
+
 
 public class ServerExceptionParser extends ExceptionParser {
 

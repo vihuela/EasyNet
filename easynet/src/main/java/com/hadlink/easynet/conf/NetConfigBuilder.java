@@ -2,6 +2,7 @@ package com.hadlink.easynet.conf;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.hadlink.easynet.util.NetConfig;
 
 import java.io.File;
@@ -18,14 +19,15 @@ public class NetConfigBuilder {
     private String log_tag = "easyNet";
     private Context appContext;
     private HashMap<String, String> header;
-    private CacheType cacheType = CacheType.ONLY_NETWORK;
+    private int maxCacheAge = 0;
+    private Gson gson;
 
 
     /**
-     * cacheType
+     * request cache-control
      */
-    public NetConfigBuilder cacheType(CacheType cacheType) {
-        this.cacheType = cacheType;
+    public NetConfigBuilder maxCacheAge(int maxCacheAge) {
+        this.maxCacheAge = maxCacheAge;
         return this;
     }
 
@@ -105,7 +107,16 @@ public class NetConfigBuilder {
         return this;
     }
 
+    /**
+     * gson config <br>
+     * default config is {@link com.hadlink.easynet.util.GsonUtils}
+     */
+    public NetConfigBuilder gson(Gson gson) {
+        this.gson = gson;
+        return this;
+    }
+
     public NetConfig createNetConfig() {
-        return new NetConfig(response_cache, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, appContext, header, cacheType);
+        return new NetConfig(response_cache, maxCacheAge, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, appContext, header, gson);
     }
 }

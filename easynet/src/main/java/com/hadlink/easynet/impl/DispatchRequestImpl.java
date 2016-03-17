@@ -3,6 +3,7 @@ package com.hadlink.easynet.impl;
 import android.util.Log;
 
 import com.google.gson.internal.LinkedTreeMap;
+import com.hadlink.easynet.conf.ErrorInfo;
 import com.hadlink.easynet.impl.exception.ExceptionParser;
 import com.hadlink.easynet.impl.exception.InternalExceptionParser;
 import com.hadlink.easynet.impl.exception.NetExceptionParser;
@@ -17,16 +18,21 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.HttpException;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Subscriber;
 
 /**
  * compose Call and Observable callBack
  */
 public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Callback<T>, CommonDispatchRequest<T> {
+
+    public String eventTag;
+
+    public DispatchRequestImpl(String eventTag) {
+        this.eventTag = eventTag;
+    }
 
     /**
      * rx
@@ -36,13 +42,6 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     }
 
     @Override public final void onError(Throwable e) {
-
-        /**
-         * no found cache
-         */
-        if (e != null && e instanceof HttpException && ((HttpException) e).code() == 504) {
-
-        }
 
         NetExceptionParser firstParser = new NetExceptionParser();
         ServerExceptionParser secondParser = new ServerExceptionParser();
@@ -56,7 +55,7 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
 
         firstParser.handleException(e, new ExceptionParser.IHandler() {
             @Override public void onHandler(Error error, String message) {
-                onDispatchError(error, message);
+                onDispatchError(error, new ErrorInfo(eventTag, message, error));
             }
         });
     }
@@ -69,21 +68,21 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
     /**
      * call
      */
-    @Override public final void onResponse(Response<T> response, Retrofit retrofit) {
+    @Override public final void onResponse(Call<T> call, Response<T> response) {
         T body = response.body();
         if (body == null) {
-            onDispatchError(Error.Server, response.raw().code() + "," + response.raw().message());
+            String message = response.raw().code() + "," + response.raw().message();
+            onDispatchError(Error.Server, new ErrorInfo(eventTag, message, Error.Server));
         } else {
             onDispatchSuccess(body);
         }
     }
 
-    @Override public final void onFailure(Throwable t) {
-
+    @Override public final void onFailure(Call<T> call, Throwable t) {
         onError(t);
     }
 
-    @Override public abstract void onDispatchError(Error error, Object message);
+    @Override public abstract void onDispatchError(Error error, ErrorInfo message);
 
     @SuppressWarnings("all")
     @Override public final void onDispatchSuccess(T t) {
@@ -123,13 +122,13 @@ public abstract class DispatchRequestImpl<T> extends Subscriber<T> implements Ca
                 }
                 onSuccess(t);
             } else {
-                onDispatchError(Error.Invalid, t);
+                onDispatchError(Error.Invalid, new ErrorInfo(eventTag, t, Error.Invalid));
             }
         } else if (t != null && t.getClass() != null) {
             printLog("check " + t.getClass().getSimpleName() + " whether inheritance CommonResponse Please");
         } else {
             //t is null
-            onDispatchError(Error.UnKnow, "response bean is null");
+            onDispatchError(Error.UnKnow, new ErrorInfo(eventTag, "response bean is null", Error.UnKnow));
         }
     }
 

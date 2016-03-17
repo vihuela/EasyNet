@@ -10,9 +10,9 @@ import com.hadlink.easynetsample.datamanager.net.response.ImageListResponse;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**

@@ -14,6 +14,8 @@ public abstract class NetUtils {
     }
 
     public static <T> T createApi(Class<T> cls, String host) {
+        if (netConfig.app == null)
+            throw new IllegalArgumentException("must be set Context,use NetUtils.setNetConfig() at once");
         return RetrofitUtils.createApi(netConfig.app, cls, host);
     }
 
@@ -40,9 +42,10 @@ public abstract class NetUtils {
      */
     public static abstract class callBack<T> extends DispatchRequestImpl<T> {
 
-        public callBack() {
-            super();
+        public callBack(String eventTag) {
+            super(eventTag);
         }
+
     }
 
 

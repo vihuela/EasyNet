@@ -58,18 +58,22 @@
 ## Before ##
    
 
-    private void before() {
-            Call<NewsResponse> originResponseCall = MyNet.get().getNews("普京", "20f453107e7739c9a363edb7507bd0ed");
-            originResponseCall.enqueue(new Callback<NewsResponse>() {
-                @Override public void onResponse(Response<NewsResponse> response, Retrofit retrofit) {
+    /**
+         * retrofit2原始用法
+         */
+        private void before1() {
+            Call<NewsResponseOrigin> originResponseCall = MyNet.get().getNewsOrigin("普京", "20f453107e7739c9a363edb7507bd0ed");
+            originResponseCall.enqueue(new Callback<NewsResponseOrigin>() {
+                @Override public void onResponse(Call<NewsResponseOrigin> call, Response<NewsResponseOrigin> response) {
+                    //数据code正确时
                     if (response.body() != null && response.body().error_code == 0) {
                         /**
                          * server api design is not a good return data redundancy may exist, we need to be screened
                          * 服务端api设计可能不良好，存在返回数据之后需要重新拼装筛选
                          */
-                        List<NewsResponse.ResultEntity> result = response.body().result;
+                        List<NewsResponseOrigin.ResultEntity> result = response.body().result;
                         List<News> newsList = new ArrayList<>();
-                        for (NewsResponse.ResultEntity entity : result) {
+                        for (NewsResponseOrigin.ResultEntity entity : result) {
                             News news = new News();
                             news.content = entity.content;
                             news.full_title = entity.full_title;
@@ -78,15 +82,15 @@
                             newsList.add(news);
                         }
                         //fill list to recycler/listView
-    
+
                         /**
                          * There may be a whole lot like this App interface, that the above code should write again?
                          * 可能整个App存在很多这样子的接口，那不是以上代码都需要走一遍？
                          */
                     }
                 }
-    
-                @Override public void onFailure(Throwable t) {
+
+                @Override public void onFailure(Call<NewsResponseOrigin> call, Throwable t) {
                     /**
                      * You need to judge for themselves what type of error
                      * 在retrofit2默认错误回调中，你需要自己去处理分析错误类型
@@ -98,38 +102,48 @@
                             //json parse error
                         }
                     }
-    
                 }
             });
         }
 
 ## After ##
-        private void after1() {
-                Call<BaseList_1Response<News>> responseCall = MyNet.get().getNews_("普京", "20f453107e7739c9a363edb7507bd0ed");
-                responseCall.enqueue(new MyNetCallBack<BaseList_1Response<News>>() {
-        
-        
-                    @Override public void onSuccess(BaseList_1Response<News> newsBaseList1Response) {
-                        /**
-                         * Direct access,NO need to be screened
-                         * 直接拿到想要的bean对象，不需要筛选
-                         */
-                        List<News> result = newsBaseList1Response.getResult();
-                        //
+            /**
+             * 针对原始改进之后的用法
+             */
+            private void after1() {
+                Call<NewsResponseUpdate> responseUpdate = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
+                responseUpdate.enqueue(new MyNetCallBack<NewsResponseUpdate>("eventTag") {
+                    @Override public void onSuccess(NewsResponseUpdate responseUpdate) {
+                        //仅有效数据时才回调
+                        List<NewsResponseUpdate.ResultEntity> result = responseUpdate.getResult();
                     }
         
-                    @Override public void onDispatchError(Error error, Object message) {
-                        super.onDispatchError(error, message);
-                        /**
-                         * error is enum ，A clear understanding of the wrong type
-                         * error是个枚举类型，可以自行判断
-                         */
+                    @Override public void onDispatchError(Error error, ErrorInfo e) {
                         switch (error) {
                             case Internal:
+                                Toast(e.getObject().toString());
+                                break;
+                            case Invalid:
+                                /**
+                                 * 有返回数据但是是无效的
+                                 */
+                                NewsResponseUpdate result = e.getObject();
+        
                                 break;
                             case NetWork:
+                                Toast(e.getObject().toString());
+                                break;
+                            case Server:
+                                Toast(e.getObject().toString());
+                                break;
+                            case UnKnow:
+                                Toast(e.getObject().toString());
                                 break;
                         }
+                        /**
+                         * 可以统一底层事件tag分发，也可以在这里具体判断
+                         */
+                        super.onDispatchError(error, e);
                     }
                 });
             }
@@ -141,8 +155,7 @@
             12-08 07:41:54.625 9444-9493/com.hadlink.easynetsample D/you_tag_name: --------------REQUEST END--------------
 # setup
 
-    compile 'com.hadlink:easynet:1.1.0'
-    compile 'com.hadlink:easynet:1.2.2_SNAPSHOT' (Retrofit & OKHttp lib to last version and some feature)
+    compile 'com.hadlink:easynet:1.2.5'
     
 # changeLog
     
@@ -153,6 +166,12 @@
 * v1.0.2 ~ v1.0.6 ：fix error dispatch bug
 
 * v1.1.0 ：optimization success callback logic
+
+* v1.2.1 ：update retrofit、OkHttp to last
+
+* v1.2.3、v1.2.4 ：add event tag
+
+* v1.2.5 ：merge ok3 Branch and Latest update references
 
     
 # author
