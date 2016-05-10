@@ -18,14 +18,12 @@ public class NetConfig {
     int RESPONSE_CACHE_SIZE;
     int HTTP_CONNECT_TIMEOUT;
     int HTTP_READ_TIMEOUT;
-    int MAX_CACHE_AGE;
     boolean PRINT_BODY;
     boolean LOG;
     Context app;
     Gson gson;
 
-    public NetConfig(File RESPONSE_CACHE, int MAX_CACHE_AGE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, HashMap<String, String> header,Gson gson) {
-        this.MAX_CACHE_AGE = MAX_CACHE_AGE;
+    public NetConfig(File RESPONSE_CACHE, int RESPONSE_CACHE_SIZE, int HTTP_CONNECT_TIMEOUT, int HTTP_READ_TIMEOUT, boolean PRINT_BODY, boolean LOG, String LOG_TAG, Context app, HashMap<String, String> header, Gson gson) {
         this.RESPONSE_CACHE = RESPONSE_CACHE;
         this.RESPONSE_CACHE_SIZE = RESPONSE_CACHE_SIZE;
         this.HTTP_CONNECT_TIMEOUT = HTTP_CONNECT_TIMEOUT;
@@ -45,5 +43,9 @@ public class NetConfig {
 
     public boolean isLog() {
         return this.LOG;
+    }
+
+    public Context getContext() {
+        return this.app.getApplicationContext();
     }
 }

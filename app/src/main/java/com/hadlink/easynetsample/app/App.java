@@ -2,11 +2,13 @@ package com.hadlink.easynetsample.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Environment;
 
 import com.hadlink.easynet.conf.NetConfigBuilder;
 import com.hadlink.easynet.util.NetConfig;
 import com.hadlink.easynet.util.NetUtils;
 
+import java.io.File;
 import java.util.HashMap;
 
 
@@ -30,6 +32,7 @@ public class App extends Application {
                 .log(true)
                 .readTimeout(2000)
                 .logTag("you_tag_name")
+                .responseCacheDir(new File(Environment.getExternalStorageDirectory(),"easyNetResponse"))
                 /*.maxCacheAge(3600 * 12)*/
                 .printResponseBody(true)
                 .header(header)

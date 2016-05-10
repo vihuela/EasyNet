@@ -3,6 +3,7 @@ package com.hadlink.easynetsample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.hadlink.easynet.conf.ErrorInfo;
 import com.hadlink.easynet.util.NetUtils;
@@ -13,6 +14,8 @@ import com.hadlink.easynetsample.datamanager.net.MyNet;
 import com.hadlink.easynetsample.datamanager.net.MyNetCallBack;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_1Response;
 import com.hadlink.easynetsample.datamanager.net.baseResponse.BaseList_2Response;
+import com.hadlink.easynetsample.datamanager.net.response.CacheBeanResponse;
+import com.hadlink.easynetsample.datamanager.net.response.HistroyResponse;
 import com.hadlink.easynetsample.datamanager.net.response.ImageListResponse;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseOrigin;
 import com.hadlink.easynetsample.datamanager.net.response.NewsResponseUpdate;
@@ -38,7 +41,44 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*before1();*/
-        after1();
+        /*after1();*/
+
+    }
+
+    public void exec(View view) {
+        cacheTest3();
+    }
+
+    private void cacheTest3() {
+        Call<HistroyResponse> histroyList = MyNet.get().getHistroyList();
+        histroyList.enqueue(new MyNetCallBack<HistroyResponse>() {
+            @Override
+            public void onSuccess(HistroyResponse histroyResponse) {
+
+            }
+        });
+    }
+
+    private void cacheTest2() {
+        Call<CacheBeanResponse> cacheTest1 = MyNet.get().getCacheTest1();
+        cacheTest1.enqueue(new MyNetCallBack<CacheBeanResponse>() {
+            @Override
+            public void onSuccess(CacheBeanResponse cacheBeanResponse) {
+
+            }
+        });
+    }
+
+    private void cacheTest1() {
+        Observable<CacheBeanResponse> cacheTest = MyNet.get().getCacheTest();
+        cacheTest
+                .compose(NetUtils.<CacheBeanResponse>applySchedulers())
+                .subscribe(new MyNetCallBack<CacheBeanResponse>() {
+                    @Override
+                    public void onSuccess(CacheBeanResponse cacheBeanResponse) {
+
+                    }
+                });
     }
 
 
@@ -48,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
     private void before1() {
         Call<NewsResponseOrigin> originResponseCall = MyNet.get().getNewsOrigin("普京", "20f453107e7739c9a363edb7507bd0ed");
         originResponseCall.enqueue(new Callback<NewsResponseOrigin>() {
-            @Override public void onResponse(Call<NewsResponseOrigin> call, Response<NewsResponseOrigin> response) {
+            @Override
+            public void onResponse(Call<NewsResponseOrigin> call, Response<NewsResponseOrigin> response) {
                 //数据code正确时
                 if (response.body() != null && response.body().error_code == 0) {
                     /**
@@ -74,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            @Override public void onFailure(Call<NewsResponseOrigin> call, Throwable t) {
+            @Override
+            public void onFailure(Call<NewsResponseOrigin> call, Throwable t) {
                 /**
                  * You need to judge for themselves what type of error
                  * 在retrofit2默认错误回调中，你需要自己去处理分析错误类型
@@ -96,12 +138,14 @@ public class MainActivity extends AppCompatActivity {
     private void after1() {
         Call<NewsResponseUpdate> responseUpdate = MyNet.get().getNewsUpdate("普京", "20f453107e7739c9a363edb7507bd0ed");
         responseUpdate.enqueue(new MyNetCallBack<NewsResponseUpdate>("eventTag") {
-            @Override public void onSuccess(NewsResponseUpdate responseUpdate) {
+            @Override
+            public void onSuccess(NewsResponseUpdate responseUpdate) {
                 //仅有效数据时才回调
                 List<NewsResponseUpdate.ResultEntity> result = responseUpdate.getResult();
             }
 
-            @Override public void onDispatchError(Error error, ErrorInfo e) {
+            @Override
+            public void onDispatchError(Error error, ErrorInfo e) {
                 switch (error) {
                     case Internal:
                         Toast(e.getObject().toString());
@@ -140,11 +184,13 @@ public class MainActivity extends AppCompatActivity {
         NetUtils.getMainThreadObservable(imageList)
                 .subscribe(new MyNetCallBack<ImageListResponse<ImageDetail>>("abc") {
 
-                    @Override public void onSuccess(ImageListResponse<ImageDetail> imageDetailImageListResponse) {
+                    @Override
+                    public void onSuccess(ImageListResponse<ImageDetail> imageDetailImageListResponse) {
                         List<ImageDetail> result = imageDetailImageListResponse.getResult();
                     }
 
-                    @Override public void onDispatchError(Error error, ErrorInfo message) {
+                    @Override
+                    public void onDispatchError(Error error, ErrorInfo message) {
                         super.onDispatchError(error, message);
                     }
                 });
@@ -159,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
         responseCall.enqueue(new MyNetCallBack<BaseList_1Response<News>>() {
 
 
-            @Override public void onSuccess(BaseList_1Response<News> newsBaseList1Response) {
+            @Override
+            public void onSuccess(BaseList_1Response<News> newsBaseList1Response) {
                 /**
                  * Direct access,NO need to be screened
                  * 直接拿到想要的bean对象，不需要筛选
@@ -168,7 +215,8 @@ public class MainActivity extends AppCompatActivity {
                 //
             }
 
-            @Override public void onDispatchError(Error error, ErrorInfo message) {
+            @Override
+            public void onDispatchError(Error error, ErrorInfo message) {
                 super.onDispatchError(error, message);
                 /**
                  * error is enum ，A clear understanding of the wrong type
@@ -187,11 +235,13 @@ public class MainActivity extends AppCompatActivity {
     private void extra3() {
         Call<BaseList_2Response<Joke>> responseCall = MyNet.get().getJokes();
         responseCall.enqueue(new MyNetCallBack<BaseList_2Response<Joke>>() {
-            @Override public void onDispatchError(Error error, ErrorInfo message) {
+            @Override
+            public void onDispatchError(Error error, ErrorInfo message) {
                 super.onDispatchError(error, message);
             }
 
-            @Override public void onSuccess(BaseList_2Response<Joke> jokeBaseList_2Response) {
+            @Override
+            public void onSuccess(BaseList_2Response<Joke> jokeBaseList_2Response) {
 
                 /**
                  * Direct access.
@@ -200,5 +250,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }

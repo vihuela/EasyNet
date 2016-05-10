@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class NetConfigBuilder {
 
     private File response_cache;
-    private int response_cache_size = 5 * 1024 * 1024;
+    private int response_cache_size = 10 * 1024 * 1024;
     private int http_connect_timeout = 8 * 1000;
     private int http_read_timeout = 5 * 1000;
     private boolean print_body = true;
@@ -19,17 +19,8 @@ public class NetConfigBuilder {
     private String log_tag = "easyNet";
     private Context appContext;
     private HashMap<String, String> header;
-    private int maxCacheAge = 0;
     private Gson gson;
 
-
-    /**
-     * request cache-control
-     */
-    public NetConfigBuilder maxCacheAge(int maxCacheAge) {
-        this.maxCacheAge = maxCacheAge;
-        return this;
-    }
 
     /**
      * local cache dir
@@ -117,6 +108,6 @@ public class NetConfigBuilder {
     }
 
     public NetConfig createNetConfig() {
-        return new NetConfig(response_cache, maxCacheAge, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, appContext, header, gson);
+        return new NetConfig(response_cache, response_cache_size, http_connect_timeout, http_read_timeout, print_body, log, log_tag, appContext, header, gson);
     }
 }

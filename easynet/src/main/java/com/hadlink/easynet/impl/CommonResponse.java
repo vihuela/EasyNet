@@ -1,7 +1,9 @@
 package com.hadlink.easynet.impl;
 
 
-public interface CommonResponse<T> {
+import java.io.Serializable;
+
+public interface CommonResponse<T> extends Serializable{
 
     /**
      * restful valid data [option]
