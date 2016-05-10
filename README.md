@@ -200,7 +200,7 @@
             12-08 07:41:54.625 9444-9493/com.hadlink.easynetsample D/you_tag_name: --------------REQUEST END--------------
 # setup
 
-    compile 'com.hadlink:easynet:1.2.5'
+    compile 'com.hadlink:easynet:1.2.6'
     
 # changeLog
     
@@ -217,6 +217,8 @@
 * v1.2.3、v1.2.4 ：add event tag
 
 * v1.2.5 ：merge ok3 Branch and Latest update references
+
+* v1.2.6 ：support cache
 
     
 # author
