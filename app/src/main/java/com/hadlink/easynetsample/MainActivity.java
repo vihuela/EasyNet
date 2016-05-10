@@ -45,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void exec(View view) {
+    public void exec1(View view) {
+        cacheTest2();
+    }
+
+    public void exec2(View view) {
         cacheTest3();
     }
 

@@ -39,8 +39,8 @@ class OkHttpUtils {
                             .connectTimeout(HTTP_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
                             .readTimeout(HTTP_READ_TIMEOUT, TimeUnit.MILLISECONDS)
                             .addInterceptor(new LoggingInterceptor())
+                            .addInterceptor(new HeaderInterceptor()) //addNetworkInterceptor must net available
                             .addInterceptor(new CacheInterceptor(context))
-                            .addInterceptor(new HeaderInterceptor())//addNetworkInterceptor must net available
                             .build();
                 }
             }
@@ -48,10 +48,6 @@ class OkHttpUtils {
         return singleton;
     }
 
-
-    /**
-     * in ok3 unUseless ..
-     */
     private static class CacheInterceptor implements Interceptor {
 
         private final Context ctx;
@@ -85,7 +81,7 @@ class OkHttpUtils {
                 curConfig = curConfig.startsWith("public") ? curConfig : "public, " + curConfig;
 
                 response.newBuilder()
-                        .header("Cache-Control", /*curConfig*/"public, "+"max-age=" + 3600)
+                        .header("Cache-Control", curConfig)
                         .removeHeader("Pragma")
                         .build();
             } else {
